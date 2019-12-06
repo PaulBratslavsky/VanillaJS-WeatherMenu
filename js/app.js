@@ -9,23 +9,29 @@ const weatherAPI = new WeatherAPI(API_KEY);
 // Create new instance of UI Object
 const ui = new UI();
 
+// Create new instance of LocalStorage Object
+const storage = new Storage();
+
 /**********************************************    
     GET INITIAL WEATHER ON DOM LOAD
 **********************************************/
-
-document.addEventListener( 'DOMContentLoaded', getWeather('Bangkok') );
+const cityfromlocalstorage = storage.getLocationCity();
+console.log(cityfromlocalstorage, "WOW")
+document.addEventListener( 'DOMContentLoaded', getWeather(cityfromlocalstorage) );
 
 /**********************************************    
     HANDLE CITY CHANGE MODAL WINDOW
 **********************************************/
 
-document.getElementById('change-city').addEventListener( 'click', () => {
-    
+document.getElementById('change-city').addEventListener( 'click', (e) => {
+    e.preventDefault();
 
     if ( getCityName() === '' || undefined ) {
         showError('Please Input a City');
     } else {
-        getWeather(getCityName());
+        const currentCity = getCityName();
+        getWeather(currentCity);
+        storage.setLocationCity(currentCity);
         resetInput();
         clearError();   
     }
